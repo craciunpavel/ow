@@ -8,6 +8,8 @@ export async function getProductsList() {
             localStorage.removeItem('products');
             return [];
         }
+    } else {
+        return [];
     }
 }
 
