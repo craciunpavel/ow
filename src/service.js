@@ -42,4 +42,3 @@ export async function updateStorage(products) {
     const parsed = JSON.stringify(products);
     localStorage.setItem('products', parsed);
 }
-

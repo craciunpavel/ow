@@ -7,11 +7,11 @@
     </div>
 
     <ul v-if="products && products.length > 0" class="d-flex p-0 flex-wrap">
-      <li v-for="(product, index) in products" :key="product.id" class="card col-lg-3 col-md-4 col-sm-6 col-12 mb-2">
+      <li v-for="product in products" :key="product.id" class="card col-lg-3 col-md-4 col-sm-6 col-12 mb-2">
       
         <img 
-          :alt="product.imageUrl"
-          :src="`https://source.unsplash.com/random/200x200?sig=${index}`/* added random images from internet for better view */" 
+          :alt="product.name"
+          :src="product.imageUrl"
           class="card-img-top"
         />
 
@@ -21,7 +21,7 @@
           <p v-if="product.price" class="price">Price: {{ product.price }}</p>
           <p v-if="product.quantity">Quantity: {{ product.quantity }}</p>
           <p v-if="product.createdAt">Created at: {{ new Date(product.createdAt).toLocaleString() }}</p>
-          <p v-if="product.updatedAt && product.updatedAt > product.createdAt">Updated at: {{ new Date(product.updatedAt).toLocaleString() }}</p>
+          <p v-if="product.updatedAt && product.updatedAt !== product.createdAt">Updated at: {{ new Date(product.updatedAt).toLocaleString() }}</p>
           
           <div class="col-12 btn-group">
             <router-link
@@ -78,7 +78,7 @@ export default {
           console.log(err);
         }
       }
-    },
+    }
   }
 };
 </script>

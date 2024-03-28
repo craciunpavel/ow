@@ -61,7 +61,11 @@
         />
       </div>
     </div>
-  
+
+    <div class="col-12" v-if="validationError">
+      <p class="alert alert-danger">All fieds are required</p>
+    </div>
+    
     <div class="col-12 btn-group">
       <button class="btn btn-success" @click="saveProduct">Update</button>
       <router-link :to="{ name: 'ProductList' }" class="btn btn-danger">Cancel</router-link>
@@ -80,7 +84,8 @@
         description: "",
         price: "",
         quantity: "",
-        imageUrl: ""
+        imageUrl: "",
+        validationError: false
       };
     },
     created: function () {
@@ -88,27 +93,33 @@
     },
     methods: {
       async saveProduct() {
-        try {
-          await updateProduct({
-            id: this.$route.params.id,
-            name: this.name,
-            description: this.description,
-            price: this.price,
-            quantity: this.quantity,
-            imageUrl: this.imageUrl,
-            createdAt: this.createdAt,
-            updatedAt: Date.now()
-          });
-          
-          this.name = "";
-          this.description = "";
-          this.price = "";
-          this.quantity = "";
-          this.imageUrl = "";
+        if (this.name.length && this.description.length && this.price.length && this.quantity.length && this.imageUrl.length) {
+          this.validationError = false;
 
-          this.$router.push("/");
-        } catch (err) {
-          console.log(err);
+          try {
+            await updateProduct({
+              id: this.$route.params.id,
+              name: this.name,
+              description: this.description,
+              price: this.price,
+              quantity: this.quantity,
+              imageUrl: this.imageUrl,
+              createdAt: this.createdAt,
+              updatedAt: Date.now()
+            });
+            
+            this.name = "";
+            this.description = "";
+            this.price = "";
+            this.quantity = "";
+            this.imageUrl = "";
+
+            this.$router.push("/");
+          } catch (err) {
+            console.log(err);
+          }
+        } else {
+          this.validationError = true;
         }
       },
       async getCurrentProduct() {

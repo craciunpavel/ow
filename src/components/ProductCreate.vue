@@ -62,6 +62,9 @@
         />
       </div>
     </div>
+    <div class="col-12" v-if="validationError">
+      <p class="alert alert-danger">All fieds are required</p>
+    </div>
   
     <div class="col-12 btn-group">
       <button class="btn btn-success" @click="addProduct">Add new product</button>
@@ -82,33 +85,41 @@
         description: "",
         price: "",
         quantity: "",
-        imageUrl: ""
+        imageUrl: "",
+        validationError: false
       };
     },
     methods: {
       async addProduct() {
-        try {
-          await addProduct({
-            id: uuidv4(), 
-            name: this.name,
-            description: this.description,
-            price: this.price,
-            quantity: this.quantity,
-            imageUrl: this.imageUrl,
-            createdAt: new Date(),
-            updatedAt: new Date()
-          });
 
-          this.name = "";
-          this.description = "";
-          this.price = "";
-          this.quantity = "";
-          this.imageUrl = "";
+        if (this.name.length && this.description.length && this.price.length && this.quantity.length && this.imageUrl.length) {
+          this.validationError = false;
 
-          this.$router.push("/");
-        } catch (err) {
-          console.log(err);
-        }
+          try {
+            await addProduct({
+              id: uuidv4(), 
+              name: this.name,
+              description: this.description,
+              price: this.price,
+              quantity: this.quantity,
+              imageUrl: this.imageUrl,
+              createdAt: new Date(),
+              updatedAt: new Date()
+            });
+
+            this.name = "";
+            this.description = "";
+            this.price = "";
+            this.quantity = "";
+            this.imageUrl = "";
+
+            this.$router.push("/");
+          } catch (err) {
+            console.log(err);
+          }
+        } else {
+          this.validationError = true;
+        }        
       },
     },
   };
